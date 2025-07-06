@@ -17,6 +17,8 @@ def main():
     board.init(count=MINE_COUNT)
     font = pygame.font.Font(None, 40)
     game_over = False
+    time_elapsed = 0
+    time_clear = 0
 
     while True:
         for event in pygame.event.get():
@@ -32,23 +34,25 @@ def main():
                     game_over = board.handle_click(event, pos)
                     if board.is_clear():
                         game_over = True
+                        time_clear = time_elapsed / 1000
                 else:
                     game_over = False
                     board.init(count=MINE_COUNT)
+                    time_elapsed = 0
 
         surface.fill(COLOR_BLACK)
 
         board.draw(surface, game_over)
         if game_over:
-            render_game_over(surface, font, board)
+            render_game_over(surface, font, board, time_clear)
 
         pygame.display.flip()
 
-        fps.tick(FPS)
+        time_elapsed += fps.tick(FPS)
 
 
-def render_game_over(surface, font, board):
-    lines = [f"Score: {board.score}" if board.is_clear() else "Game Over", "Click to retry"]
+def render_game_over(surface, font, board, time_clear):
+    lines = [f"Score: {board.score} time: {time_clear}" if board.is_clear() else "Game Over", "Click to retry"]
 
     x = SCREEN_WIDTH // 2
     y = SCREEN_HEIGHT // 2 - 25

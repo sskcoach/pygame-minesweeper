@@ -19,15 +19,14 @@ def main():
     game_over = False
     time_elapsed = 0
     time_clear = 0
+    running = True
 
-    while True:
+    while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                quit_game()
-                return
+                running = False
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                quit_game()
-                return
+                running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if not game_over:
                     pos = (event.pos[0] // LINE_SIZE, event.pos[1] // LINE_SIZE)
@@ -65,10 +64,7 @@ def render_game_over(surface, font, board, time_clear):
         y += 50
 
 
-def quit_game():
-    pygame.quit()
-    sys.exit()
-
-
 if __name__ == "__main__":
     main()
+    pygame.quit()
+    sys.exit()

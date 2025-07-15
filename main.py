@@ -17,15 +17,15 @@ while running:
 
     surface.fill((0, 0, 0))
 
-    # size: 26
-
-    start_x = 320 / 2 - (26 * 9) / 2
-    start_y = 240 / 2 - (26 * 9) / 2
+    size = 26
+    start_x = 320 / 2 - (size * 9) / 2
+    start_y = 240 / 2 - (size * 9) / 2
+    COLOR_WHITE = (255, 255, 255)
 
     for y in range(9):
         for x in range(9):
-            pygame.draw.rect(surface, (255, 255, 255),
-                             (start_x + x * 26, start_y + y * 26, 27, 27), 1)
+            rect = (start_x + x * size, start_y + y * size, size + 1, size + 1)
+            pygame.draw.rect(surface, COLOR_WHITE, rect, 1)
 
     pygame.display.flip()
 

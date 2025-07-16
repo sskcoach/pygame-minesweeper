@@ -1,10 +1,12 @@
 import pygame
 import sys
+from const import *
+
 
 def main():
     pygame.init()
 
-    surface = pygame.display.set_mode((320, 240))
+    surface = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
     fps = pygame.time.Clock()
 
@@ -16,21 +18,20 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
 
-        surface.fill((0, 0, 0))
+        surface.fill(BLACK)
 
-        size = int(240 / 9)
-        start_x = 320 / 2 - (size * 9) / 2
-        start_y = 240 / 2 - (size * 9) / 2
-        COLOR_WHITE = (255, 255, 255)
+        size = int(SCREEN_HEIGHT / 9)
+        start_x = SCREEN_WIDTH / 2 - (size * 9) / 2
+        start_y = SCREEN_HEIGHT / 2 - (size * 9) / 2
 
         for y in range(9):
             for x in range(9):
                 rect = (start_x + x * size, start_y + y * size, size + 1, size + 1)
-                pygame.draw.rect(surface, COLOR_WHITE, rect, 1)
+                pygame.draw.rect(surface, WHITE, rect, 1)
 
         pygame.display.flip()
 
-        fps.tick(60)
+        fps.tick(FPS)
 
     pygame.quit()
     sys.exit()

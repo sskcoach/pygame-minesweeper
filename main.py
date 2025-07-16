@@ -18,7 +18,7 @@ def main():
 
         surface.fill((0, 0, 0))
 
-        size = 26
+        size = int(240 / 9)
         start_x = 320 / 2 - (size * 9) / 2
         start_y = 240 / 2 - (size * 9) / 2
         COLOR_WHITE = (255, 255, 255)

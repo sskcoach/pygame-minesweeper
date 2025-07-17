@@ -10,6 +10,22 @@ def main():
 
     fps = pygame.time.Clock()
 
+    FIELD_MINE = "M"
+
+    mine_field = [
+        [None, None, None, None, None, None, None, None, None, ],
+        [None, None, None, None, None, None, None, None, None, ],
+        [None, FIELD_MINE, None, None, FIELD_MINE, None, None, None, None, ],
+        [None, None, None, None, None, None, None, None, None, ],
+        [None, None, None, None, None, None, None, None, None, ],
+        [None, None, None, FIELD_MINE, None, None, None, None, None, ],
+        [None, None, None, None, None, None, FIELD_MINE, None, None, ],
+        [None, FIELD_MINE, None, None, None, None, None, None, None, ],
+        [None, None, None, None, None, None, None, None, None, ],
+    ]
+
+    print(mine_field)
+
     running = True
 
     while running:
@@ -28,6 +44,9 @@ def main():
             for x in range(9):
                 rect = (start_x + x * size, start_y + y * size, size + 1, size + 1)
                 pygame.draw.rect(surface, WHITE, rect, 1)
+                value = mine_field[y][x]
+                if value == FIELD_MINE:
+                    pygame.draw.rect(surface, WHITE, rect, 10)
 
         pygame.display.flip()
 

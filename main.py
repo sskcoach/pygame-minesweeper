@@ -1,6 +1,7 @@
 import pygame
 import sys
 from const import *
+import random
 
 
 def main():
@@ -10,19 +11,19 @@ def main():
 
     fps = pygame.time.Clock()
 
-    FIELD_MINE = "M"
-
     mine_field = [
-        [None, None, None, None, None, None, None, None, None, ],
-        [None, None, None, None, None, None, None, None, None, ],
-        [None, FIELD_MINE, None, None, FIELD_MINE, None, None, None, None, ],
-        [None, None, None, None, None, None, None, None, None, ],
-        [None, None, None, None, None, None, None, None, None, ],
-        [None, None, None, FIELD_MINE, None, None, None, None, None, ],
-        [None, None, None, None, None, None, FIELD_MINE, None, None, ],
-        [None, FIELD_MINE, None, None, None, None, None, None, None, ],
-        [None, None, None, None, None, None, None, None, None, ],
+        [None for _ in range(9)] for _ in range(9)
     ]
+
+    max_mine_count = 10
+    mine_count = 0
+    while mine_count < max_mine_count:
+        x = random.randrange(0, 9)
+        y = random.randrange(0, 9)
+        if mine_field[y][x] is None:
+            mine_field[y][x] = FIELD_MINE
+            mine_count += 1
+
 
     print(mine_field)
 

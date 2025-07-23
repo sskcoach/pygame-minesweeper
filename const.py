@@ -11,3 +11,8 @@ BLACK = (0, 0, 0)
 
 # field
 FIELD_MINE = "M"
+
+STATE_HIDDEN = "H"
+STATE_OPEN = "O"
+STATE_FLAGGED = "F"
+STATE_QUESTION = "?"

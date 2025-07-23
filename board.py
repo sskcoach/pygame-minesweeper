@@ -10,6 +10,12 @@ class Board:
             [None for _ in range(9)] for _ in range(9)
         ]
 
+        self.state_field = [
+            [STATE_HIDDEN for _ in range(9)] for _ in range(9)
+        ]
+
+        self.font = pygame.font.Font(None, 17)
+
         max_mine_count = 10
         mine_count = 0
         while mine_count < max_mine_count:
@@ -50,11 +56,19 @@ class Board:
             for x in range(9):
                 rect = (start_x + x * size, start_y + y * size, size + 1, size + 1)
                 pygame.draw.rect(surface, WHITE, rect, 1)
-                value = self.mine_field[y][x]
-                if value == FIELD_MINE:
-                    pygame.draw.rect(surface, WHITE, rect, 10)
-                else:
-                    pygame.draw.rect(surface, (255, 255, 0), rect, value)
+
+                fill_rect = (start_x + x * size + 2, start_y + y * size + 2, size + 1 - 3, size + 1 - 3)
+                state = self.state_field[y][x]
+                if state == STATE_HIDDEN:
+                    pygame.draw.rect(surface, GREY, fill_rect, 0)
+                elif state == STATE_OPEN:
+                    mine = self.mine_field[y][x]
+                    text = self.font.render(f"{mine}", True, WHITE, None)
+                    text_rect = text.get_rect(center = (start_x + x * size + size / 2, start_y + y * size + size / 2))
+                    surface.blit(text, text_rect)
+
+
+
 
     def on_click(self, pos, button):
         print(f"pos: {pos} button: {button}")
@@ -71,3 +85,5 @@ class Board:
 
         index_pos = (int(relative_pos[0] / size), int(relative_pos[1] / size))
         print(f"index_pos {index_pos}")
+
+        self.state_field[index_pos[1]][index_pos[0]] = STATE_OPEN

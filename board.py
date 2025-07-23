@@ -55,3 +55,19 @@ class Board:
                     pygame.draw.rect(surface, WHITE, rect, 10)
                 else:
                     pygame.draw.rect(surface, (255, 255, 0), rect, value)
+
+    def on_click(self, pos, button):
+        print(f"pos: {pos} button: {button}")
+        size = int(SCREEN_HEIGHT / 9)
+        start_x = SCREEN_WIDTH / 2 - (size * 9) / 2
+        start_y = SCREEN_HEIGHT / 2 - (size * 9) / 2
+        relative_pos = (pos[0] - start_x, pos[1] - start_y)
+
+        if relative_pos[0] < 0: return
+        if relative_pos[1] < 0: return
+
+        if size * 9 < relative_pos[0]: return
+        if size * 9 < relative_pos[1]: return
+
+        index_pos = (int(relative_pos[0] / size), int(relative_pos[1] / size))
+        print(f"index_pos {index_pos}")

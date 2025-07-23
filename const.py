@@ -6,6 +6,7 @@ FPS = 60
 
 # colors
 WHITE = (255, 255, 255)
+GREY = (127, 127, 127)
 BLACK = (0, 0, 0)
 
 # field

@@ -103,9 +103,24 @@ class Board:
 
 
     def open(self, index_pos):
-        state = self.state_field[index_pos[1]][index_pos[0]]
-        if state == STATE_HIDDEN:
-            self.state_field[index_pos[1]][index_pos[0]] = STATE_OPEN
+        x, y = index_pos
+        state = self.state_field[y][x]
+        if state != STATE_HIDDEN: return
+
+        self.state_field[y][x] = STATE_OPEN
+
+        mine = self.mine_field[y][x]
+        if mine == 0:
+            for y_delta in [-1, 0, 1]:
+                for x_delta in [-1, 0, 1]:
+                    if y_delta == 0 and x_delta == 0: continue
+
+                    try:
+                        new_pos = (x + x_delta, y + y_delta)
+                        self.open(new_pos)
+                    except IndexError:
+                        pass
+
 
     def mark(self, index_pos):
         x, y = index_pos

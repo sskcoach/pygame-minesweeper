@@ -38,12 +38,12 @@ class Board:
 
         for y_delta in [-1, 0, 1]:
             for x_delta in [-1, 0, 1]:
-                try:
-                    value = self.mine_field[y_delta + y][x_delta + x]
-                    if value == FIELD_MINE:
-                        result += 1
-                except IndexError:
-                    pass
+                new_pos = (x + x_delta, y + y_delta)
+                if not self.is_valid_position(new_pos): continue
+
+                value = self.mine_field[new_pos[1]][new_pos[0]]
+                if value == FIELD_MINE:
+                    result += 1
 
         return result
 
@@ -57,7 +57,8 @@ class Board:
                 rect = (start_x + x * size, start_y + y * size, size + 1, size + 1)
                 pygame.draw.rect(surface, WHITE, rect, 1)
 
-                fill_rect = (start_x + x * size + 2, start_y + y * size + 2, size + 1 - 3, size + 1 - 3)
+                fill_rect = (start_x + x * size + 2, start_y + y * size + 2, size + 1 - 3,
+                             size + 1 - 3)
                 state = self.state_field[y][x]
                 pygame.draw.rect(surface, GREY, fill_rect, 0)
 
@@ -69,7 +70,6 @@ class Board:
                     self.draw_text(surface, (x, y), mine, WHITE)
                 else:
                     self.draw_text(surface, (x, y), state, BLACK)
-
 
     def draw_text(self, surface, pos, title, color):
         x, y = pos
@@ -101,7 +101,6 @@ class Board:
         elif button == pygame.BUTTON_RIGHT:
             self.mark(index_pos)
 
-
     def open(self, index_pos):
         x, y = index_pos
         state = self.state_field[y][x]
@@ -113,14 +112,10 @@ class Board:
         if mine == 0:
             for y_delta in [-1, 0, 1]:
                 for x_delta in [-1, 0, 1]:
-                    if y_delta == 0 and x_delta == 0: continue
+                    new_pos = (x + x_delta, y + y_delta)
+                    if not self.is_valid_position(new_pos): continue
 
-                    try:
-                        new_pos = (x + x_delta, y + y_delta)
-                        self.open(new_pos)
-                    except IndexError:
-                        pass
-
+                    self.open(new_pos)
 
     def mark(self, index_pos):
         x, y = index_pos
@@ -132,4 +127,8 @@ class Board:
         elif state == STATE_QUESTION:
             self.state_field[y][x] = STATE_HIDDEN
 
-
+    def is_valid_position(self, position):
+        x, y = position
+        if x < 0 or 9 <= x: return False
+        if y < 0 or 9 <= y: return False
+        return True

@@ -21,7 +21,10 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.MOUSEBUTTONUP:
-                board.on_click(event.pos, event.button)
+                game_is_over = board.on_click(event.pos, event.button)
+                if game_is_over:
+                    print("Game is Over")
+
 
 
 

@@ -88,23 +88,26 @@ class Board:
     def on_click(self, pos, button):
         relative_pos = (pos[0] - self.start_x, pos[1] - self.start_y)
 
-        if relative_pos[0] < 0: return
-        if relative_pos[1] < 0: return
+        if relative_pos[0] < 0: return False
+        if relative_pos[1] < 0: return False
 
-        if self.size * self.columns < relative_pos[0]: return
-        if self.size * self.rows < relative_pos[1]: return
+        if self.size * self.columns < relative_pos[0]: return False
+        if self.size * self.rows < relative_pos[1]: return False
 
         index_pos = (int(relative_pos[0] / self.size), int(relative_pos[1] / self.size))
 
         if button == pygame.BUTTON_LEFT:
-            self.open(index_pos)
+            return self.open(index_pos)
         elif button == pygame.BUTTON_RIGHT:
             self.mark(index_pos)
+            return False
+
+        return False
 
     def open(self, index_pos):
         x, y = index_pos
         state = self.state_field[y][x]
-        if state != STATE_HIDDEN: return
+        if state != STATE_HIDDEN: return False
 
         self.state_field[y][x] = STATE_OPEN
 
@@ -116,6 +119,9 @@ class Board:
                     if not self.is_valid_position(new_pos): continue
 
                     self.open(new_pos)
+            return False
+
+        return mine == FIELD_MINE
 
     def mark(self, index_pos):
         x, y = index_pos

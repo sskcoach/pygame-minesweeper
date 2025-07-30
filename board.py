@@ -138,3 +138,10 @@ class Board:
         if x < 0 or self.columns <= x: return False
         if y < 0 or self.rows <= y: return False
         return True
+
+    def open_all_mines(self):
+        for y in range(self.rows):
+            for x in range(self.columns):
+                if self.mine_field[y][x] == FIELD_MINE:
+                    self.state_field[y][x] = STATE_OPEN
+

@@ -24,6 +24,7 @@ def main():
                 game_is_over = board.on_click(event.pos, event.button)
                 if game_is_over:
                     print("Game is Over")
+                    board.open_all_mines()
 
 
 

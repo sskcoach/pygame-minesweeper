@@ -15,6 +15,7 @@ def main():
 
     running = True
     game_is_over = False
+    game_is_clear = False
 
     while running:
 
@@ -25,6 +26,8 @@ def main():
                 game_is_over = board.on_click(event.pos, event.button)
                 if game_is_over:
                     board.open_all_mines()
+                else:
+                    game_is_clear = board.is_clear()
 
         surface.fill(BLACK)
 
@@ -32,6 +35,8 @@ def main():
 
         if game_is_over:
             draw_game_over(surface)
+        if game_is_clear:
+            draw_game_clear(surface)
 
         pygame.display.flip()
 
@@ -44,6 +49,12 @@ def main():
 def draw_game_over(surface):
     font = pygame.font.Font(None, 46)
     text = font.render("Game Over", True, RED, WHITE)
+    text_rect = text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
+    surface.blit(text, text_rect)
+
+def draw_game_clear(surface):
+    font = pygame.font.Font(None, 46)
+    text = font.render("Game Clear!!!", True, BLUE, WHITE)
     text_rect = text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
     surface.blit(text, text_rect)
 

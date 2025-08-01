@@ -22,7 +22,7 @@ class Board:
 
         self.font = pygame.font.Font(None, 17)
 
-        max_mine_count = 1
+        max_mine_count = 10
         mine_count = 0
         while mine_count < max_mine_count:
             x = random.randrange(0, self.columns)
@@ -85,7 +85,7 @@ class Board:
                     self.start_y + y * self.size + self.size / 2))
         surface.blit(text, text_rect)
 
-    def on_click(self, pos, button):
+    def on_click(self, pos, button, shift):
         relative_pos = (pos[0] - self.start_x, pos[1] - self.start_y)
 
         if relative_pos[0] < 0: return False
@@ -96,7 +96,9 @@ class Board:
 
         index_pos = (int(relative_pos[0] / self.size), int(relative_pos[1] / self.size))
 
-        if button == pygame.BUTTON_LEFT:
+        if shift and button == pygame.BUTTON_LEFT:
+            return self.chording(index_pos)
+        elif button == pygame.BUTTON_LEFT:
             return self.open(index_pos)
         elif button == pygame.BUTTON_RIGHT:
             self.mark(index_pos)
@@ -154,6 +156,46 @@ class Board:
                     return False
 
         return True
+
+    def chording(self, index_pos):
+        x, y = index_pos
+        state = self.state_field[y][x]
+        if state != STATE_OPEN: return False
+
+        mine_count = self.mine_field[y][x]
+        flag_count = self.get_flag_count(index_pos)
+
+        if mine_count != flag_count: return False
+
+        return self.open_no_flagged(index_pos)
+
+    def get_flag_count(self, index_pos):
+        x, y = index_pos
+        result = 0
+
+        for y_delta in [-1, 0, 1]:
+            for x_delta in [-1, 0, 1]:
+                new_pos = (x + x_delta, y + y_delta)
+                if not self.is_valid_position(new_pos): continue
+                if self.state_field[new_pos[1]][new_pos[0]] == STATE_FLAGGED:
+                    result += 1
+
+        return result
+
+    def open_no_flagged(self, index_pos):
+        x, y = index_pos
+        result = False
+
+        for y_delta in [-1, 0, 1]:
+            for x_delta in [-1, 0, 1]:
+                new_pos = (x + x_delta, y + y_delta)
+                if not self.is_valid_position(new_pos): continue
+                if self.state_field[new_pos[1]][new_pos[0]] == STATE_FLAGGED: continue
+                if not self.open(new_pos): continue
+                result = True
+
+        return result
+
 
 
 

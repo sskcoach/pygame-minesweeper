@@ -23,7 +23,8 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.MOUSEBUTTONUP:
-                game_is_over = board.on_click(event.pos, event.button)
+                shift = pygame.key.get_mods() & pygame.KMOD_SHIFT
+                game_is_over = board.on_click(event.pos, event.button, shift)
                 if game_is_over:
                     board.open_all_mines()
                 else:

@@ -22,7 +22,7 @@ class Board:
 
         self.font = pygame.font.Font(None, 17)
 
-        max_mine_count = 10
+        max_mine_count = 1
         mine_count = 0
         while mine_count < max_mine_count:
             x = random.randrange(0, self.columns)
@@ -144,4 +144,16 @@ class Board:
             for x in range(self.columns):
                 if self.mine_field[y][x] == FIELD_MINE:
                     self.state_field[y][x] = STATE_OPEN
+
+    def is_clear(self):
+        for y in range(self.rows):
+            for x in range(self.columns):
+                is_not_mine = self.mine_field[y][x] != FIELD_MINE
+                is_closed = self.state_field[y][x] != STATE_OPEN
+                if is_not_mine and is_closed:
+                    return False
+
+        return True
+
+
 

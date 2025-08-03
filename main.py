@@ -60,11 +60,21 @@ def draw_game_over(surface):
     text_rect = text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
     surface.blit(text, text_rect)
 
+    font = pygame.font.Font(None, 25)
+    text = font.render("Tap anywhere to restart.", True, BLUE, WHITE)
+    text_rect = text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50))
+    surface.blit(text, text_rect)
+
 
 def draw_game_clear(surface):
     font = pygame.font.Font(None, 46)
     text = font.render("Game Clear!!!", True, BLUE, WHITE)
     text_rect = text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
+    surface.blit(text, text_rect)
+
+    font = pygame.font.Font(None, 25)
+    text = font.render("Tap anywhere to restart.", True, BLUE, WHITE)
+    text_rect = text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50))
     surface.blit(text, text_rect)
 
 

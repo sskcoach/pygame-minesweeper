@@ -11,9 +11,10 @@ def main():
 
     fps = pygame.time.Clock()
 
-    board = Board(9, 9, 10)
-
     running = True
+
+    max_mine_count = 10
+    board = Board(9, 9, max_mine_count)
     game_is_over = False
     game_is_clear = False
 
@@ -23,6 +24,12 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.MOUSEBUTTONUP:
+                if game_is_over or game_is_clear:
+                    board = Board(9, 9, max_mine_count)
+                    game_is_over = False
+                    game_is_clear = False
+
+                    continue
                 shift = pygame.key.get_mods() & pygame.KMOD_SHIFT
                 game_is_over = board.on_click(event.pos, event.button, shift)
                 if game_is_over:

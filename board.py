@@ -4,7 +4,7 @@ from const import *
 
 
 class Board:
-    def __init__(self, columns, rows):
+    def __init__(self, columns, rows, max_mine_count):
         self.columns = columns
         self.rows = rows
 
@@ -22,7 +22,6 @@ class Board:
 
         self.font = pygame.font.Font(None, 17)
 
-        max_mine_count = 10
         mine_count = 0
         while mine_count < max_mine_count:
             x = random.randrange(0, self.columns)

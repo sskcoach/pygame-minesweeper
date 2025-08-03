@@ -11,7 +11,7 @@ def main():
 
     fps = pygame.time.Clock()
 
-    board = Board(9, 9)
+    board = Board(9, 9, 10)
 
     running = True
     game_is_over = False
@@ -52,6 +52,7 @@ def draw_game_over(surface):
     text = font.render("Game Over", True, RED, WHITE)
     text_rect = text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
     surface.blit(text, text_rect)
+
 
 def draw_game_clear(surface):
     font = pygame.font.Font(None, 46)

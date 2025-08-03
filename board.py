@@ -38,6 +38,18 @@ class Board:
 
         print(self.mine_field)
 
+    def get_mine(self, position):
+        return self.mine_field[position[1]][position[0]]
+
+    def set_mine(self, position, value):
+        self.mine_field[position[1]][position[0]] = value
+
+    def get_state(self, position):
+        return self.state_field[position[1]][position[0]]
+
+    def set_state(self, position, value):
+        self.state_field[position[1]][position[0]] = value
+
     def calculate_mine_count(self, x, y):
         result = 0
 

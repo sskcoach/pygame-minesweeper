@@ -50,17 +50,24 @@ class Board:
     def set_state(self, position, value):
         self.state_field[position[1]][position[0]] = value
 
-    def calculate_mine_count(self, x, y):
-        result = 0
+    def around_tiles(self, position):
+        result = []
 
         for y_delta in [-1, 0, 1]:
             for x_delta in [-1, 0, 1]:
-                new_pos = (x + x_delta, y + y_delta)
+                if x_delta == 0 and y_delta == 0: continue
+                new_pos = (position[0] + x_delta, position[1] + y_delta)
                 if not self.is_valid_position(new_pos): continue
+                result.append(new_pos)
 
-                value = self.get_mine(new_pos)
-                if value == FIELD_MINE:
-                    result += 1
+        return result
+
+    def calculate_mine_count(self, x, y):
+        result = 0
+
+        for new_pos in self.around_tiles((x, y)):
+            if self.get_mine(new_pos) == FIELD_MINE:
+                result += 1
 
         return result
 
@@ -125,12 +132,8 @@ class Board:
 
         mine = self.get_mine(index_pos)
         if mine == 0:
-            for y_delta in [-1, 0, 1]:
-                for x_delta in [-1, 0, 1]:
-                    new_pos = (index_pos[0] + x_delta, index_pos[1] + y_delta)
-                    if not self.is_valid_position(new_pos): continue
-
-                    self.open(new_pos)
+            for new_pos in self.around_tiles(index_pos):
+                self.open(new_pos)
             return False
 
         return mine == FIELD_MINE
@@ -180,24 +183,19 @@ class Board:
     def get_flag_count(self, index_pos):
         result = 0
 
-        for y_delta in [-1, 0, 1]:
-            for x_delta in [-1, 0, 1]:
-                new_pos = (index_pos[0] + x_delta, index_pos[1] + y_delta)
-                if not self.is_valid_position(new_pos): continue
-                if self.get_state(new_pos) == STATE_FLAGGED:
-                    result += 1
+        for new_pos in self.around_tiles(index_pos):
+            if not self.is_valid_position(new_pos): continue
+            if self.get_state(new_pos) == STATE_FLAGGED:
+                result += 1
 
         return result
 
     def open_no_flagged(self, index_pos):
         result = False
 
-        for y_delta in [-1, 0, 1]:
-            for x_delta in [-1, 0, 1]:
-                new_pos = (index_pos[0] + x_delta, index_pos[1] + y_delta)
-                if not self.is_valid_position(new_pos): continue
-                if self.get_state(new_pos) == STATE_FLAGGED: continue
-                if not self.open(new_pos): continue
-                result = True
+        for new_pos in self.around_tiles(index_pos):
+            if self.get_state(new_pos) == STATE_FLAGGED: continue
+            if not self.open(new_pos): continue
+            result = True
 
         return result

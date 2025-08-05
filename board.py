@@ -75,7 +75,7 @@ class Board:
                 fill_rect = (self.start_x + x * self.size + 2, self.start_y + y * self.size + 2,
                              self.size + 1 - 3,
                              self.size + 1 - 3)
-                state = self.state_field[y][x]
+                state = self.get_state((x, y))
                 pygame.draw.rect(surface, GREY, fill_rect, 0)
 
                 if state == STATE_HIDDEN:
@@ -118,17 +118,16 @@ class Board:
         return False
 
     def open(self, index_pos):
-        x, y = index_pos
-        state = self.state_field[y][x]
+        state = self.get_state(index_pos)
         if state != STATE_HIDDEN: return False
 
-        self.state_field[y][x] = STATE_OPEN
+        self.set_state(index_pos, STATE_OPEN)
 
-        mine = self.get_mine((x, y))
+        mine = self.get_mine(index_pos)
         if mine == 0:
             for y_delta in [-1, 0, 1]:
                 for x_delta in [-1, 0, 1]:
-                    new_pos = (x + x_delta, y + y_delta)
+                    new_pos = (index_pos[0] + x_delta, index_pos[1] + y_delta)
                     if not self.is_valid_position(new_pos): continue
 
                     self.open(new_pos)
@@ -137,14 +136,13 @@ class Board:
         return mine == FIELD_MINE
 
     def mark(self, index_pos):
-        x, y = index_pos
-        state = self.state_field[y][x]
+        state = self.get_state(index_pos)
         if state == STATE_HIDDEN:
-            self.state_field[y][x] = STATE_FLAGGED
+            self.set_state(index_pos, STATE_FLAGGED)
         elif state == STATE_FLAGGED:
-            self.state_field[y][x] = STATE_QUESTION
+            self.set_state(index_pos, STATE_QUESTION)
         elif state == STATE_QUESTION:
-            self.state_field[y][x] = STATE_HIDDEN
+            self.set_state(index_pos, STATE_HIDDEN)
 
     def is_valid_position(self, position):
         x, y = position
@@ -156,24 +154,23 @@ class Board:
         for y in range(self.rows):
             for x in range(self.columns):
                 if self.get_mine((x, y)) == FIELD_MINE:
-                    self.state_field[y][x] = STATE_OPEN
+                    self.set_state((x, y), STATE_OPEN)
 
     def is_clear(self):
         for y in range(self.rows):
             for x in range(self.columns):
                 is_not_mine = self.get_mine((x, y)) != FIELD_MINE
-                is_closed = self.state_field[y][x] != STATE_OPEN
+                is_closed = self.get_state((x, y)) != STATE_OPEN
                 if is_not_mine and is_closed:
                     return False
 
         return True
 
     def chording(self, index_pos):
-        x, y = index_pos
-        state = self.state_field[y][x]
+        state = self.get_state(index_pos)
         if state != STATE_OPEN: return False
 
-        mine_count = self.get_mine((x, y))
+        mine_count = self.get_mine(index_pos)
         flag_count = self.get_flag_count(index_pos)
 
         if mine_count != flag_count: return False
@@ -181,32 +178,26 @@ class Board:
         return self.open_no_flagged(index_pos)
 
     def get_flag_count(self, index_pos):
-        x, y = index_pos
         result = 0
 
         for y_delta in [-1, 0, 1]:
             for x_delta in [-1, 0, 1]:
-                new_pos = (x + x_delta, y + y_delta)
+                new_pos = (index_pos[0] + x_delta, index_pos[1] + y_delta)
                 if not self.is_valid_position(new_pos): continue
-                if self.state_field[new_pos[1]][new_pos[0]] == STATE_FLAGGED:
+                if self.get_state(new_pos) == STATE_FLAGGED:
                     result += 1
 
         return result
 
     def open_no_flagged(self, index_pos):
-        x, y = index_pos
         result = False
 
         for y_delta in [-1, 0, 1]:
             for x_delta in [-1, 0, 1]:
-                new_pos = (x + x_delta, y + y_delta)
+                new_pos = (index_pos[0] + x_delta, index_pos[1] + y_delta)
                 if not self.is_valid_position(new_pos): continue
-                if self.state_field[new_pos[1]][new_pos[0]] == STATE_FLAGGED: continue
+                if self.get_state(new_pos) == STATE_FLAGGED: continue
                 if not self.open(new_pos): continue
                 result = True
 
         return result
-
-
-
-

@@ -26,15 +26,15 @@ class Board:
         while mine_count < max_mine_count:
             x = random.randrange(0, self.columns)
             y = random.randrange(0, self.rows)
-            if self.mine_field[y][x] is None:
-                self.mine_field[y][x] = FIELD_MINE
+            if self.get_mine((x, y)) is None:
+                self.set_mine((x, y), FIELD_MINE)
                 mine_count += 1
 
         for y in range(self.rows):
             for x in range(self.columns):
-                if self.mine_field[y][x] is None:
+                if self.get_mine((x, y)) is None:
                     mine_count = self.calculate_mine_count(x, y)
-                    self.mine_field[y][x] = mine_count
+                    self.set_mine((x, y), mine_count)
 
         print(self.mine_field)
 
@@ -58,7 +58,7 @@ class Board:
                 new_pos = (x + x_delta, y + y_delta)
                 if not self.is_valid_position(new_pos): continue
 
-                value = self.mine_field[new_pos[1]][new_pos[0]]
+                value = self.get_mine(new_pos)
                 if value == FIELD_MINE:
                     result += 1
 
@@ -82,7 +82,7 @@ class Board:
                     pass
                 elif state == STATE_OPEN:
                     pygame.draw.rect(surface, BLACK, fill_rect, 0)
-                    mine = self.mine_field[y][x]
+                    mine = self.get_mine((x, y))
                     self.draw_text(surface, (x, y), mine, WHITE)
                 else:
                     self.draw_text(surface, (x, y), state, BLACK)
@@ -124,7 +124,7 @@ class Board:
 
         self.state_field[y][x] = STATE_OPEN
 
-        mine = self.mine_field[y][x]
+        mine = self.get_mine((x, y))
         if mine == 0:
             for y_delta in [-1, 0, 1]:
                 for x_delta in [-1, 0, 1]:
@@ -155,13 +155,13 @@ class Board:
     def open_all_mines(self):
         for y in range(self.rows):
             for x in range(self.columns):
-                if self.mine_field[y][x] == FIELD_MINE:
+                if self.get_mine((x, y)) == FIELD_MINE:
                     self.state_field[y][x] = STATE_OPEN
 
     def is_clear(self):
         for y in range(self.rows):
             for x in range(self.columns):
-                is_not_mine = self.mine_field[y][x] != FIELD_MINE
+                is_not_mine = self.get_mine((x, y)) != FIELD_MINE
                 is_closed = self.state_field[y][x] != STATE_OPEN
                 if is_not_mine and is_closed:
                     return False
@@ -173,7 +173,7 @@ class Board:
         state = self.state_field[y][x]
         if state != STATE_OPEN: return False
 
-        mine_count = self.mine_field[y][x]
+        mine_count = self.get_mine((x, y))
         flag_count = self.get_flag_count(index_pos)
 
         if mine_count != flag_count: return False

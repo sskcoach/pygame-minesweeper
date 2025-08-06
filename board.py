@@ -74,7 +74,7 @@ class Board:
                     mine = self.mine_field[y][x]
                     if mine == FIELD_MINE:
                         self.draw_emoji(surface, (x, y), mine, RED)
-                    else:
+                    elif mine != 0:
                         self.draw_text(surface, (x, y), mine, WHITE)
                 else:
                     self.draw_emoji(surface, (x, y), state, BLACK)

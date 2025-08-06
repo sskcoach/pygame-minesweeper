@@ -20,7 +20,8 @@ class Board:
             [STATE_HIDDEN for _ in range(self.columns)] for _ in range(self.rows)
         ]
 
-        self.font = pygame.font.Font(None, 17)
+        self.font = pygame.font.Font(None, 25)
+        self.emoji_font = pygame.font.Font("font/NotoEmoji-Medium.ttf", 17)
 
         mine_count = 0
         while mine_count < max_mine_count:
@@ -71,9 +72,12 @@ class Board:
                 elif state == STATE_OPEN:
                     pygame.draw.rect(surface, BLACK, fill_rect, 0)
                     mine = self.mine_field[y][x]
-                    self.draw_text(surface, (x, y), mine, WHITE)
+                    if mine == FIELD_MINE:
+                        self.draw_emoji(surface, (x, y), mine, RED)
+                    elif mine != 0:
+                        self.draw_text(surface, (x, y), mine, WHITE)
                 else:
-                    self.draw_text(surface, (x, y), state, BLACK)
+                    self.draw_emoji(surface, (x, y), state, BLACK)
 
     def draw_text(self, surface, pos, title, color):
         x, y = pos
@@ -83,6 +87,16 @@ class Board:
             center=(self.start_x + x * self.size + self.size / 2,
                     self.start_y + y * self.size + self.size / 2))
         surface.blit(text, text_rect)
+
+    def draw_emoji(self, surface, pos, title, color):
+        x, y = pos
+
+        text = self.emoji_font.render(f"{title}", True, color, None)
+        text_rect = text.get_rect(
+            center=(self.start_x + x * self.size + self.size / 2,
+                    self.start_y + y * self.size + self.size / 2))
+        surface.blit(text, text_rect)
+
 
     def on_click(self, pos, button, shift):
         relative_pos = (pos[0] - self.start_x, pos[1] - self.start_y)

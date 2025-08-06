@@ -12,10 +12,10 @@ RED = (255, 0, 0)
 BLUE = (0, 0, 255)
 
 # field
-FIELD_MINE = "M"
+FIELD_MINE = "💣"
 
 # state
 STATE_HIDDEN = "H"
 STATE_OPEN = "O"
-STATE_FLAGGED = "F"
-STATE_QUESTION = "?"
+STATE_FLAGGED = "🚩"
+STATE_QUESTION = "❓"

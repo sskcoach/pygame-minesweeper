@@ -20,7 +20,7 @@ class Board:
             [STATE_HIDDEN for _ in range(self.columns)] for _ in range(self.rows)
         ]
 
-        self.font = pygame.font.Font(None, 17)
+        self.font = pygame.font.Font(None, 25)
         self.emoji_font = pygame.font.Font("font/NotoEmoji-Medium.ttf", 17)
 
         mine_count = 0
